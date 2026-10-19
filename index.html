@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Kanban Flow - Fast, accessible, and intuitive task management board">
+  <title>Kanban Flow - Task Board</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header Aplikasi (Sticky Navigation & Brand Top-Left, CTA Top-Right) -->
+  <header class="app-header" role="banner">
+    <a href="./" class="brand-link" aria-label="Kanban Flow - Reload and return to home">
+      <div class="brand-icon" aria-hidden="true">📋</div>
+      <h1 class="brand-title">Kanban Flow</h1>
+    </a>
+    <div class="header-actions">
+      <!-- Dark / Light Mode Toggle Button (Visual Comfort) -->
+      <button type="button" class="btn-icon btn-theme-toggle" id="btn-theme-toggle" aria-label="Switch to dark mode" title="Toggle color theme">
+        <svg class="theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+        <svg class="theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+      </button>
+      <!-- CTA Top-Right -->
+      <button type="button" class="btn btn-primary" id="btn-quick-add" aria-haspopup="dialog">
+        <span aria-hidden="true">+</span> New Task
+      </button>
+    </div>
+  </header>
+
+  <!-- Value Proposition Strip (High Above The Fold & Dashboard Metrics) -->
+  <section class="board-hero" aria-label="Workspace Summary">
+    <div class="hero-container">
+      <div class="hero-headline">
+        <h2 class="hero-title">Project Dashboard</h2>
+        <p class="hero-description">Organize, track, and ship tasks with fluid drag-and-drop workflow and persistent state.</p>
+      </div>
+      <div class="hero-metrics" role="status" aria-label="Task progress metrics">
+        <div class="metric-pill">
+          <span class="metric-count" id="stat-total" aria-live="polite">0</span>
+          <span class="metric-label">Total Tasks</span>
+        </div>
+        <div class="metric-pill">
+          <span class="metric-count" id="stat-active" aria-live="polite">0</span>
+          <span class="metric-label">In Progress</span>
+        </div>
+        <div class="metric-pill">
+          <span class="metric-count" id="stat-done" aria-live="polite">0</span>
+          <span class="metric-label">Completed</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Board Container (Responsive Grid Columns) -->
+  <main class="board-wrapper">
+    <div class="board-container" id="board" role="region" aria-label="Kanban Task Board">
+      
+      <!-- Kolom To Do -->
+      <section class="column" id="col-todo" data-column-id="todo" aria-labelledby="heading-todo">
+        <header class="column-header">
+          <div class="column-meta">
+            <span class="column-status-indicator status-todo" aria-hidden="true"></span>
+            <h2 id="heading-todo" class="column-title">To Do</h2>
+            <span class="col-count" data-col-count="todo" aria-label="0 tasks" aria-live="polite">0</span>
+          </div>
+          <button type="button" class="btn-icon btn-add-card" data-column-id="todo" aria-label="Add task to To Do column" title="Add task to To Do">
+            <span aria-hidden="true">+</span>
+          </button>
+        </header>
+        <div class="card-list" id="list-todo" data-column-id="todo" role="list" aria-label="To Do task list">
+          <!-- Kartu dirender via src/ui.js -->
+        </div>
+      </section>
+
+      <!-- Kolom Doing -->
+      <section class="column" id="col-doing" data-column-id="doing" aria-labelledby="heading-doing">
+        <header class="column-header">
+          <div class="column-meta">
+            <span class="column-status-indicator status-doing" aria-hidden="true"></span>
+            <h2 id="heading-doing" class="column-title">In Progress</h2>
+            <span class="col-count" data-col-count="doing" aria-label="0 tasks" aria-live="polite">0</span>
+          </div>
+          <button type="button" class="btn-icon btn-add-card" data-column-id="doing" aria-label="Add task to In Progress column" title="Add task to In Progress">
+            <span aria-hidden="true">+</span>
+          </button>
+        </header>
+        <div class="card-list" id="list-doing" data-column-id="doing" role="list" aria-label="In Progress task list">
+          <!-- Kartu dirender via src/ui.js -->
+        </div>
+      </section>
+
+      <!-- Kolom Done -->
+      <section class="column" id="col-done" data-column-id="done" aria-labelledby="heading-done">
+        <header class="column-header">
+          <div class="column-meta">
+            <span class="column-status-indicator status-done" aria-hidden="true"></span>
+            <h2 id="heading-done" class="column-title">Done</h2>
+            <span class="col-count" data-col-count="done" aria-label="0 tasks" aria-live="polite">0</span>
+          </div>
+          <button type="button" class="btn-icon btn-add-card" data-column-id="done" aria-label="Add task to Done column" title="Add task to Done">
+            <span aria-hidden="true">+</span>
+          </button>
+        </header>
+        <div class="card-list" id="list-done" data-column-id="done" role="list" aria-label="Done task list">
+          <!-- Kartu dirender via src/ui.js -->
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Informative Footer (Key Information, Autosave status, Keyboard Legend, Version) -->
+  <footer class="app-footer" role="contentinfo">
+    <div class="footer-container">
+      <div class="footer-section footer-storage">
+        <span class="storage-dot" aria-hidden="true"></span>
+        <span class="storage-text">All changes saved to localStorage</span>
+      </div>
+      <div class="footer-section footer-shortcuts">
+        <span class="shortcut-tip">
+          <kbd>Enter</kbd> Open Task &bull; <kbd>Esc</kbd> Close Dialog &bull; <kbd>Tab</kbd> Navigate
+        </span>
+      </div>
+      <div class="footer-section footer-meta">
+        <span class="footer-copy">&copy; 2026 Kanban Flow &bull; Accessible Task Engine</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Native Modal Dialog untuk Create & Edit Task -->
+  <dialog id="card-modal" class="modal-dialog" aria-labelledby="modal-title" aria-modal="true">
+    <form id="card-form" method="dialog" class="modal-form" novalidate>
+      <header class="modal-header">
+        <h2 id="modal-title" class="modal-heading">Create Task</h2>
+        <button type="button" class="btn-icon btn-close-modal" id="btn-close-modal" aria-label="Close dialog">&times;</button>
+      </header>
+
+      <div class="modal-body">
+        <!-- Hidden Inputs untuk ID kartu dan target kolom -->
+        <input type="hidden" id="task-id" name="id" value="">
+        <input type="hidden" id="task-column-id" name="columnId" value="todo">
+
+        <!-- Input Judul -->
+        <div class="form-group">
+          <label for="task-title" class="form-label">
+            Task Title <span class="required-mark" aria-hidden="true">*</span>
+          </label>
+          <input 
+            type="text" 
+            id="task-title" 
+            name="title" 
+            class="form-input" 
+            placeholder="e.g. Implement WCAG focus ring" 
+            maxlength="120" 
+            required 
+            aria-describedby="title-help"
+          >
+          <span id="title-help" class="form-help">Max 120 characters</span>
+        </div>
+
+        <!-- Input Deskripsi -->
+        <div class="form-group">
+          <label for="task-desc" class="form-label">Description</label>
+          <textarea 
+            id="task-desc" 
+            name="description" 
+            class="form-textarea" 
+            rows="3" 
+            placeholder="Provide context or acceptance criteria..." 
+            maxlength="600"
+          ></textarea>
+        </div>
+
+        <div class="form-row">
+          <!-- Select Priority -->
+          <div class="form-group flex-1">
+            <label for="task-priority" class="form-label">Priority</label>
+            <select id="task-priority" name="priority" class="form-select">
+              <option value="low">Low</option>
+              <option value="medium" selected>Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+
+          <!-- Select Target Column -->
+          <div class="form-group flex-1">
+            <label for="task-target-col" class="form-label">Column</label>
+            <select id="task-target-col" class="form-select">
+              <option value="todo">To Do</option>
+              <option value="doing">In Progress</option>
+              <option value="done">Done</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Input Tags -->
+        <div class="form-group">
+          <label for="task-tags" class="form-label">Tags (comma separated)</label>
+          <input 
+            type="text" 
+            id="task-tags" 
+            name="tags" 
+            class="form-input" 
+            placeholder="frontend, a11y, bug"
+          >
+        </div>
+
+        <!-- Alert Error inline -->
+        <div id="form-error-banner" class="form-error-banner" role="alert" aria-live="polite" hidden></div>
+      </div>
+
+      <footer class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="btn-cancel-modal">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="btn-save-modal">Save Task</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <!-- Main JavaScript Entrypoint -->
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>
